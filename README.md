@@ -5,7 +5,7 @@
 本專案實作一個基於 **GTSRB (German Traffic Sign Recognition Benchmark)** 資料集的交通號誌辨識系統。
 系統比較了深度學習模型 (**CNN 搭配空間轉換網路 STN**) 與多種機器學習模型 (**NN, SVM, Random Forest, KNN, AdaBoost, K-means**) 在特徵降維 (**PCA**) 後的分類表現與訓練時間。
 
-**[前往 Streamlit Demo 網站](TBD)**
+**[前往 Streamlit Demo 網站](https://vision_hw02_gtsrb_cnn.streamlit.app)**
 
 ---
 
@@ -133,7 +133,7 @@ GTSRB_CNN/
 
 ## 🚀 **安裝與執行（Installation and Execution）**
 
-**1. 環境準備**
+### 1. 環境準備
 
 建議使用 `conda` 或 `venv` 建立一個獨立的 Python 虛擬環境。
 
@@ -145,29 +145,34 @@ source Vision_HW_02/bin/activate  # On Windows, use `.venv\Scripts\activate`
 # 或是，使用 virtualenvwrapper 建立環境
 mkvirtualenv Vision_HW_02
 workon Vision_HW_02
+```
 
+### 2. 安裝相依套件
 
-**2. 安裝相依套件**
 ```bash
 pip install -r requirements.txt
 ```
 
-**3. 執行模型訓練**
-*CNN 深度學習模型 (含 STN)*
-```bash
-python src/train_cnn.py
-```
-*傳統機器學習模型 (含 PCA)*
-```bash
-python src/train_ml.py
-```
+### 3. 執行模型訓練
 
-**4. 執行模型評估與產出圖表**
+- **CNN 深度學習模型 (含 STN)**
+  ```bash
+  python src/train_cnn.py
+  ```
+
+- **傳統機器學習模型 (含 PCA)**
+  ```bash
+  python src/train_ml.py
+  ```
+
+### 4. 執行模型評估與產出圖表
+
 ```bash
 python src/evaluate.py
 ```
 
-**5. 啟動 Streamlit 互動介面**
+### 5. 啟動 Streamlit 互動介面
+
 ```bash
 streamlit run gtsrb.py
 ```
@@ -186,7 +191,7 @@ streamlit run gtsrb.py
 
 3.  **連結您的儲存庫**
     - **Repository**: 選擇您存放此專案的 GitHub 儲存庫。
-    - **Branch**: 選擇您要部署的分支（例如 `main` 或 `master`），本專案是 `gtsrb.py`。
+    - **Branch**: 選擇您要部署的分支（例如 `main` 或 `master`）。
     - **Main file path**: 確認應用程式的主檔案路徑為 `gtsrb.py`。
 
 4.  **部署**
