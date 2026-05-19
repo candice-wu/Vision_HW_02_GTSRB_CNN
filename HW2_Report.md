@@ -80,3 +80,13 @@ Cross Entropy 專門設計用於多類別分類問題，它計算模型預測的
    這是一個強烈對比的案例：
    * **AdaBoost 的先天限制**：`scikit-learn` 的 AdaBoost 預設使用深度僅為 1 的決策樹 (Decision Stump)。面對 43 個類別的高複雜度影像分類，這種極弱的分類器根本無力有效切割特徵空間，導致嚴重的欠擬合 (Underfitting)。
    * **K-means 的物理特性與上帝視角**：交通號誌在 PCA 特徵空間中，相似的顏色與形狀本來就會自然聚攏 (物以類聚)。加上我們在實作「多數決映射」時，直接使用了測試集的真實標籤來對答案 (Oracle Mapping / Data Leakage)，這使得 K-means 在分群後獲得了最佳的標籤指派，從而在這場評估中拿下了 20.61% 的保底分數，意外擊敗了配置不當的 AdaBoost。
+
+7. **Streamlit 雲端部署與 GitHub 大檔案限制問題**
+   在嘗試將專案推播至 GitHub 並部署到 Streamlit Community Cloud 時，遇到了兩個挑戰：
+   * **GitHub 100MB 檔案限制**：本專案的 `randomforest_model.joblib` 權重檔高達 598MB，直接 `git push` 會遭到 GitHub 伺服器拒絕 (超過單一檔案 100MB 限制)。此外，完整的訓練資料集 (高達 39,000 多張圖片) 也會導致上傳時間過長。
+   * **Streamlit 讀取權重報錯**：若為了解決容量問題而將整個 `models/` 與 `data/` 目錄加入 `.gitignore`，會導致 Streamlit 部署後出現 `[Errno 2] No such file or directory` 的錯誤，且「隨機抽樣」功能也會因缺乏圖片而失效。
+   * **解法策略**：我們對 `.gitignore` 進行了精細的設定：
+     1. 僅排除過大的 `models/randomforest_model.joblib` 以及不需要用於推論的龐大訓練集 `data/raw/Train/` 和 `data/raw/Meta/`。
+     2. 保留體積合理的其他機器學習模型與深度學習權重 (如 CNN, SVM 等)，確保雲端載入無誤。
+     3. 保留測試集 `data/raw/Test/`，讓 Web 端的「隨機抽樣測試集」功能得以順利運作。
+     同時，在 Streamlit 應用程式中加入防呆機制 (`os.path.exists`)，當讀取不到過大的 Random Forest 模型時，系統能自動略過並維持網頁正常運作。
