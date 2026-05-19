@@ -5,7 +5,7 @@
 本專案實作一個基於 **GTSRB (German Traffic Sign Recognition Benchmark)** 資料集的交通號誌辨識系統。
 系統比較了深度學習模型 (**CNN 搭配空間轉換網路 STN**) 與多種機器學習模型 (**NN, SVM, Random Forest, KNN, AdaBoost, K-means**) 在特徵降維 (**PCA**) 後的分類表現與訓練時間。
 
-**[前往 Streamlit Demo 網站](https://vision_hw02_gtsrb_cnn.streamlit.app)**
+**[前往 Streamlit Demo 網站](https://vision-hw02-gtsrb-cnn.streamlit.app)**
 
 ---
 
