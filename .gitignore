@@ -13,6 +13,7 @@ __pycache__/
 .venv/
 venv/
 
-# Large Files
-data/
-models/
+# Large Files & Unnecessary Data for Inference
+data/raw/Train/
+data/raw/Meta/
+models/randomforest_model.joblib
