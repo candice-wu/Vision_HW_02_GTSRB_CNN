@@ -11,7 +11,7 @@ import json
 
 def train():
     data_dir = 'data/raw'
-    epochs = 15
+    epochs = 25
     batch_size = 64
     learning_rate = 0.001
     save_dir = 'models'
@@ -27,6 +27,7 @@ def train():
     model = GTSRB_CNN(num_classes=43).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.1, patience=3)
     
     best_val_acc = 0.0
     history = {'epoch': [], 'train_loss': [], 'train_acc': [], 'val_loss': [], 'val_acc': []}
@@ -76,6 +77,9 @@ def train():
         val_acc = val_correct / val_total
         
         print(f"Epoch {epoch+1}/{epochs} - Train Loss: {train_loss:.4f} Acc: {train_acc:.4f} | Val Loss: {val_loss:.4f} Acc: {val_acc:.4f}")
+        
+        # Step the scheduler based on validation accuracy
+        scheduler.step(val_acc)
         
         if val_acc > best_val_acc:
             best_val_acc = val_acc

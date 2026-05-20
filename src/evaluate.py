@@ -38,7 +38,7 @@ def load_models(device):
 def evaluate():
     print("Starting evaluation...")
     data_dir = 'data/raw'
-    save_dir = 'reports/figures'
+    save_dir = 'reports/figures/2nd_backup'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
         
@@ -152,6 +152,7 @@ def evaluate():
     print("Generating ROC Curve...")
     y_true_bin = label_binarize(y_true, classes=range(43))
     
+    macro_aucs = {}
     plt.figure()
     for name in ordered_names:
         if name in results and results[name]['probs'] is not None:
@@ -172,6 +173,7 @@ def evaluate():
             mean_tpr /= 43
             
             macro_auc = auc(all_fpr, mean_tpr)
+            macro_aucs[name] = float(macro_auc)
             plt.plot(all_fpr, mean_tpr, label=f'{name} (macro AUC = {macro_auc:.3f})')
             
     plt.plot([0, 1], [0, 1], 'k--')
@@ -228,6 +230,15 @@ def evaluate():
         plt.savefig(os.path.join(save_dir, 'training_time_comparison.png'))
         plt.close()
         
+    # 8. Save Metrics JSON
+    metrics_path = os.path.join(save_dir, 'metrics.json')
+    metrics_dict = {
+        'accuracies': {name: float(accuracies[name]) for name in accuracies},
+        'macro_aucs': macro_aucs
+    }
+    with open(metrics_path, 'w', encoding='utf-8') as f:
+        json.dump(metrics_dict, f, indent=4)
+    print(f"Metrics saved to {metrics_path}")
     
     print("Evaluation complete! Visualizations saved in 'reports/figures/'.")
 

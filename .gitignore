@@ -17,3 +17,6 @@ venv/
 data/raw/Train/
 data/raw/Meta/
 models/randomforest_model.joblib
+
+# Agent
+.agent/

@@ -4,11 +4,11 @@
 ## 需求 (Requirements)
 
 ### 需求：CNN 架構定義 (CNN Architecture Definition)
-系統「必須」使用 PyTorch 定義一個卷積神經網路 (CNN)，用於分類 43 種 GTSRB 交通號誌類別。
+系統「必須」使用 PyTorch 定義一個卷積神經網路 (CNN)，用於分類 43 種 GTSRB 交通號誌類別。為了確保在多分類問題上的穩定收斂性與高維特徵表達能力，每個卷積層 (Conv2d) 後「必須」緊接一個批次標準化層 (BatchNorm2d)。
 
 #### 情境：CNN 的正向傳播 (Forward pass of CNN)
 - **當 (WHEN)** 輸入形狀為 (N, 3, 32, 32) 的影像批次進入 CNN 時
-- **則 (THEN)** 模型輸出形狀為 (N, 43) 的對數機率 (logits)。
+- **則 (THEN)** 模型在經過空間變換與包含批次標準化的卷積計算後，輸出形狀為 (N, 43) 的對數機率 (logits)，且在訓練時每個 Epoch 收斂表現應顯著優於無標準化之版本。
 
 ### 需求：空間轉換網路模組 (Spatial Transformer Network Module)
 系統「必須」包含一個 STN 模組（使用 `affine_grid` 與 `grid_sample`），作為 CNN 的第一層組件，允許對影像進行空間變換。

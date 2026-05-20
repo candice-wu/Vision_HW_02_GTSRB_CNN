@@ -1,6 +1,6 @@
 # 🚦 GTSRB 交通號誌辨識系統
 
-![Version](https://img.shields.io/badge/Version-v1.1.1-blue) ![License](https://img.shields.io/badge/License-MIT-green)
+![Version](https://img.shields.io/badge/Version-v1.2.0-blue) ![License](https://img.shields.io/badge/License-MIT-green)
 
 本專案實作一個基於 **GTSRB (German Traffic Sign Recognition Benchmark)** 資料集的交通號誌辨識系統。
 系統比較了深度學習模型 (**CNN 搭配空間轉換網路 STN**) 與多種機器學習模型 (**NN, SVM, Random Forest, KNN, AdaBoost, K-means**) 在特徵降維 (**PCA**) 後的分類表現與訓練時間。
@@ -34,9 +34,11 @@
 要產生跨模型的比較圖表 (包含準確率比較、ROC 曲線、CNN 混淆矩陣、Loss 曲線、訓練時間比較以及 PCA Scree Plot)，請執行評估腳本。所有視覺化圖表將自動儲存至 `reports/figures/` 目錄中。圖表包含漸層色彩，並將 K-means 透過「多數決映射」納入準確率比較。
 
 ### 5. 系統部署 (Deployment with Streamlit)
-我們透過 Streamlit 建立了一個互動式的 Web 應用程式 (`gtsrb.py`)。
-- **互動推論**: 提供「隨機抽樣」與「本機圖片上傳」功能，可即時觀看多個模型的分類結果。
-- **評估儀表板**: 提供豐富的圖表展示與結論說明。
+我們透過 Streamlit 建立了一個互動式的 Web 應用程式 (`gtsrb.py`)，採用極致的四分頁展示佈局：
+- **🚥 GTSRB 交通號誌辨識 (tab1)**: 提供「隨機抽樣」與「本機圖片上傳」功能，可即時觀看多個模型的分類結果。
+- **📊 初始評估指標 (Original) (tab2)**: 讀取 `1st_backup/` 呈現第一階段基準模型 (Baseline) 的 6 大效能圖表。
+- **🔆 優化評估指標 (Optimized) (tab3)**: 讀取 `2nd_backup/` 呈現導入 BatchNorm2d 與 Data Augment 優化後的 6 大效能圖表，AUC 達 1.0000。
+- **⛳ 系統優化與驗收說明 (tab4)**: 整合 `walkthrough.md` 即時渲染，提供一站式學術驗收面板。
 
 ---
 
@@ -206,4 +208,4 @@ streamlit run gtsrb.py
 * 本研究專案僅供國立中興大學碩士學位 - 人機互動與電腦視覺課程作業研究之目的使用。
 * 指導教授：國立中興大學 凃瀞珽 教授。
 * 詳細的更新歷史紀錄，請參閱 [CHANGELOG.md](./CHANGELOG.md)。
-* 最後更新：2026-05-20 (v1.1.1)
+* 最後更新：2026-05-20 (v1.2.0)

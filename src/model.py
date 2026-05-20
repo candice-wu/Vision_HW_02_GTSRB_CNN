@@ -46,8 +46,13 @@ class GTSRB_CNN(nn.Module):
         self.stn = STN()
         
         self.conv1 = nn.Conv2d(3, 32, kernel_size=5)
+        self.bn1 = nn.BatchNorm2d(32)
+        
         self.conv2 = nn.Conv2d(32, 64, kernel_size=5)
+        self.bn2 = nn.BatchNorm2d(64)
+        
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3)
+        self.bn3 = nn.BatchNorm2d(128)
         
         # 32x32 -> Conv5x5 -> 28x28 -> MaxPool -> 14x14
         # 14x14 -> Conv5x5 -> 10x10 -> MaxPool -> 5x5
@@ -60,10 +65,10 @@ class GTSRB_CNN(nn.Module):
         # transform the input using STN
         x = self.stn(x)
 
-        # Perform the usual forward pass
-        x = F.relu(F.max_pool2d(self.conv1(x), 2))
-        x = F.relu(F.max_pool2d(self.conv2(x), 2))
-        x = F.relu(F.max_pool2d(self.conv3(x), 2))
+        # Perform the usual forward pass with batch normalization
+        x = F.relu(F.max_pool2d(self.bn1(self.conv1(x)), 2))
+        x = F.relu(F.max_pool2d(self.bn2(self.conv2(x)), 2))
+        x = F.relu(F.max_pool2d(self.bn3(self.conv3(x)), 2))
         
         x = x.view(-1, 128 * 1 * 1)
         x = F.relu(self.fc1(x))

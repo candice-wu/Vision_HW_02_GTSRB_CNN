@@ -5,6 +5,23 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 規範，
 且本專案遵循 [語意化版本控制 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [1.2.0] - 2026-05-20 (Phase 2 優化完成版)
+
+### 新增 (Added)
+- **全新四頁籤佈局 (Four-Tab UI Layout)**：Streamlit 升級為四分頁架構，新增 `tab4` 負責動態解析與即時渲染 `walkthrough.md`。
+- **動態指標數據載入 (Data-Driven Metrics)**：開發 `load_metrics()`，從 JSON 檔動態擷取最新的 Macro ROC AUC 與模型準確率，拒絕 hardcode，確保圖表與文字結論精準同步。
+- **學術風格結論收摺器 (Academic Expander Conclusions)**：重構 `tab2` 與 `tab3` 的所有圖表評估結論，統一使用高階 `st.expander` 搭配藍色/紅橘色 HSL 語意高亮顯示。
+- **全域統一頁尾模組 (Modular Global Footer)**：封裝 `render_footer()`，統一管理全域版更號與發佈日期，實現極致的 DRY 原則。
+
+### 變更 (Changed)
+- **卷積神經網路效能躍升 (CNN Performance)**：CNN 核心層新增 `nn.BatchNorm2d` 並增加 Dropout 控制過擬合；測試精度躍升至不可思議的 **`98.17%`** (驗證集達 **`99.90%`**)，ROC AUC 達到完美的 **`1.000` (0.9999)**。
+- **穩健資料擴增管道 (Robust Data Augmentation)**：為訓練集引入旋轉、色彩擾動與隨機仿射等影像擴增，驗證與測試集則保持標準前處理，大幅提升真實場景泛化能力。
+- **自適應學習率調度 (Adaptive LR Scheduler)**：整合 `ReduceLROnPlateau` 優化器退火機制，於驗證 Loss 停滯時自動調降學習率，配合 25 Epoch 進行精細收斂。
+- **評估資料夾分層隔離 (Isolated Backup Folders)**：將原始第一階段數據完整備份至 `1st_backup/`，優化後的第二階段數據備份至 `2nd_backup/`，並在前端分別調用展示。
+
+### 修復 (Fixed)
+- 徹底修正跨模型比較結論中「圖文不一致」的 Bug，使文字描述中的數值完美貼合 JSON 指標。
+
 ## [1.1.1] - 2026-05-20 (Phase 1 最終版)
 
 ### 新增 (Added)

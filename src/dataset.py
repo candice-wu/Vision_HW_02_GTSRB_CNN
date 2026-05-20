@@ -51,17 +51,27 @@ def get_dataloaders(data_dir, batch_size=64, val_split=0.2):
     train_df, val_df = train_test_split(full_train_df, test_size=val_split, random_state=42, stratify=full_train_df['ClassId'])
     
     # Define transforms
-    # GTSRB reference typically resizes to 32x32.
-    transform = transforms.Compose([
+    # Train transform with data augmentation
+    train_transform = transforms.Compose([
         transforms.Resize((32, 32)),
+        transforms.RandomRotation(15),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2),
+        transforms.RandomAffine(degrees=0, translate=(0.1, 0.1), scale=(0.9, 1.1)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.3337, 0.3064, 0.3171], std=[0.2672, 0.2564, 0.2629]) # GTSRB approx mean/std
     ])
     
+    # Val/Test transform (clean preprocessing)
+    val_transform = transforms.Compose([
+        transforms.Resize((32, 32)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.3337, 0.3064, 0.3171], std=[0.2672, 0.2564, 0.2629])
+    ])
+    
     # Create datasets
-    train_dataset = GTSRBDataset(data_dir=data_dir, csv_file=train_df, transform=transform)
-    val_dataset = GTSRBDataset(data_dir=data_dir, csv_file=val_df, transform=transform)
-    test_dataset = GTSRBDataset(data_dir=data_dir, csv_file=test_csv_path, transform=transform)
+    train_dataset = GTSRBDataset(data_dir=data_dir, csv_file=train_df, transform=train_transform)
+    val_dataset = GTSRBDataset(data_dir=data_dir, csv_file=val_df, transform=val_transform)
+    test_dataset = GTSRBDataset(data_dir=data_dir, csv_file=test_csv_path, transform=val_transform)
     
     # Create dataloaders
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)

@@ -16,3 +16,25 @@
 #### 情境：檢視預測結果 (Viewing predictions)
 - **當 (WHEN)** 圖片載入完成後
 - **則 (THEN)** UI 介面會以清晰的版面結構，展示出 CNN, NN, SVM, RF, KNN, 與 AdaBoost 模型對該圖片的預測類別，以及相對應的信心分數 (Confidence Scores，若該模型支援)。
+
+### 需求：四頁籤佈局 (Four-Tab UI Layout)
+系統的 `st.tabs` 呼叫「必須」改為四個分頁：
+1. `st.tabs[0]` / `tab1`："🚥 GTSRB 交通號誌辨識" (隨機抽樣/即時辨識主頁)
+2. `st.tabs[1]` / `tab2`："📊 初始評估指標 (Original)" (第一階段評估結果展示)
+3. `st.tabs[2]` / `tab3`："🔆 優化評估指標 (Optimized)" (第二階段優化後評估結果展示)
+4. `st.tabs[3]` / `tab4`："⛳ 系統優化與驗收說明" (讀取並呈現專案目錄下 walkthrough.md 的詳細成果驗收)
+
+#### 情境：切換網頁分頁 (Switching tabs in the application)
+- **當 (WHEN)** 使用者在網頁上點擊不同的分頁按鈕時
+- **則 (THEN)** 系統「必須」流暢切換至對應的頁面，且維持版尾資訊渲染以及模型快取載入。
+
+### 需求：分層圖表資料夾隔離與讀取 (Isolated Metrics Folders Reading)
+系統「必須」實作圖表資料夾的隔離與獨立讀取，以在不同的分頁呈現不同優化階段的模型指標。
+
+#### 情境：讀取初始評估圖表 (Reading Original Metrics)
+- **當 (WHEN)** 使用者進入 `tab2` 時
+- **則 (THEN)** 系統「必須」從 `reports/figures/1st_backup/` 目錄中載入並呈現 accuracy_comparison, loss_curve, cnn_confusion_matrix, training_time_comparison, pca_scree_plot 以及 roc_curve_comparison 六張圖表，並搭配原始結語說明。
+
+#### 情境：讀取優化評估圖表 (Reading Optimized Metrics)
+- **當 (WHEN)** 使用者進入 `tab3` 時
+- **則 (THEN)** 系統「必須」從 `reports/figures/2nd_backup/` 目錄中載入並呈現相同命名的六張優化後圖表，並搭配針對 BatchNorm 與 Data Augment 優化後的特有結語。
