@@ -5,6 +5,18 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 規範，
 且本專案遵循 [語意化版本控制 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [1.3.0] - 2026-05-31 (Phase 3 OOD 安全防禦版)
+
+### 新增 (Added)
+- **OOD 信賴度門檻過濾 (OOD Confidence Thresholding)**：實作基於學術理論 Maximum Softmax Probability (MSP) 的防禦機制，全域套用 0.75 的置信度黃金門檻，動態篩選分佈外 (OOD) 與干擾影像。
+- **SVM 信心分數近似轉換 (SVM Confidence Softmax)**：針對不支援原生機率的 SVM 模型，實作對其 `decision_function()` 決策距離向量進行 Softmax 歸一化轉換以近似機率置信度。
+- **機率機器學習模型信心過濾 (ML Probability Filtering)**：為 KNN, Random Forest, AdaBoost 與 NN (MLP) 模型導入 `predict_proba()` 置信度提取與 0.75 安全門檻攔截。
+- **警告提示 UI (Warning UI)**：當推論信賴度低於 0.75 時，UI 會自動攔截原預測結果並顯示醒目的黃橘色安全警告：「⚠️ 這是非德國交通號誌 (OOD 安全攔截)」。
+
+### 變更 (Changed)
+- **OpenSpec 變更與規格同步**：建立並封存了 `add-ood-confidence-threshold` 變更。更新了 `streamlit-ui` 的主規格並建立了全新的 `ood-filtering` 系統規格，確保全生命週期之 Spec-Driven 開發合規。
+- **README 與作業報告更新**：同步更新 README.md、HW2_Report.md 與 WALKTHROUGH 報告，完備防禦性研究內容與實機效果驗收說明。
+
 ## [1.2.0] - 2026-05-20 (Phase 2 優化完成版)
 
 ### 新增 (Added)

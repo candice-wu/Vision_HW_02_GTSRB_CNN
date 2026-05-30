@@ -1,6 +1,6 @@
 # 🚦 GTSRB 交通號誌辨識系統
 
-![Version](https://img.shields.io/badge/Version-v1.2.0-blue) ![License](https://img.shields.io/badge/License-MIT-green)
+![Version](https://img.shields.io/badge/Version-v1.3.0-blue) ![License](https://img.shields.io/badge/License-MIT-green)
 
 本專案實作一個基於 **GTSRB (German Traffic Sign Recognition Benchmark)** 資料集的交通號誌辨識系統。
 系統比較了深度學習模型 (**CNN 搭配空間轉換網路 STN**) 與多種機器學習模型 (**NN, SVM, Random Forest, KNN, AdaBoost, K-means**) 在特徵降維 (**PCA**) 後的分類表現與訓練時間。
@@ -208,4 +208,4 @@ streamlit run gtsrb.py
 * 本研究專案僅供國立中興大學碩士學位 - 人機互動與電腦視覺課程作業研究之目的使用。
 * 指導教授：國立中興大學 凃瀞珽 教授。
 * 詳細的更新歷史紀錄，請參閱 [CHANGELOG.md](./CHANGELOG.md)。
-* 最後更新：2026-05-20 (v1.2.0)
+* 最後更新：2026-05-31 (v1.3.0)

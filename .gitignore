@@ -20,3 +20,9 @@ models/randomforest_model.joblib
 
 # Agent
 .agent/
+
+# Standard Ignores
+.ipynb_checkpoints/
+.pytest_cache/
+*.log
+
