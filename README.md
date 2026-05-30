@@ -18,23 +18,23 @@
 ### 2. 資料理解與準備 (Data Understanding & Preparation)
 - **資料集:** [Kaggle GTSRB Dataset](https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign)
 - **資料準備:** 
-  影像在送入模型前，統一調整大小為 `32x32` 像素並進行正規化 (Normalization)。我們實作了 PyTorch 的 `Dataset` 與 `DataLoader` 來處理資料集批次讀取，並將訓練集 (`Train.csv`) 以 80/20 的比例切分為 Train 與 Validation (使用 `sklearn` 的 `stratify` 分層抽樣)。
+  影像在送入模型前，統一調整大小為 `32x32` 像素並進行正規化 (Normalization)。實作 PyTorch 的 `Dataset` 與 `DataLoader` 以處理資料集批次讀取，並將訓練集 (`Train.csv`) 以 80/20 的比例切分為 Train 與 Validation (使用 `sklearn` 的 `stratify` 分層抽樣)。
 
 ### 3. 模型建置 (Modeling)
-我們開發了兩條主要的建模流程：
+開發兩條主要的建模流程：
 1. **深度學習 (CNN + STN):**
    - 實作於 `src/model.py`。
-   - 結合了 Spatial Transformer Network (STN) 模組，讓模型能自動學習並校正影像的空間變換。
+   - 結合 Spatial Transformer Network (STN) 模組，讓模型能自動學習並校正影像的空間變換。
    - 訓練過程會自動記錄每個 Epoch 的 Loss/Acc 歷史及總訓練時間。
 2. **機器學習 (PCA + ML):**
    - 將影像打平為 3072 維度的特徵向量，並使用 PCA 進行降維，保留 95% 的變異數。
    - 訓練模型包含: NN (MLP), SVM, Random Forest, KNN, AdaBoost, K-Means。
 
 ### 4. 模型評估 (Evaluation)
-要產生跨模型的比較圖表 (包含準確率比較、ROC 曲線、CNN 混淆矩陣、Loss 曲線、訓練時間比較以及 PCA Scree Plot)，請執行評估腳本。所有視覺化圖表將自動儲存至 `reports/figures/` 目錄中。圖表包含漸層色彩，並將 K-means 透過「多數決映射」納入準確率比較。
+執行評估腳本以產生跨模型的比較圖表 (包含準確率比較、ROC 曲線、CNN 混淆矩陣、Loss 曲線、訓練時間比較以及 PCA Scree Plot)，所有視覺化圖表將自動儲存至 `reports/figures/` 目錄中。圖表包含漸層色彩，並將 K-means 透過「多數決映射」納入準確率比較。
 
 ### 5. 系統部署 (Deployment with Streamlit)
-我們透過 Streamlit 建立了一個互動式的 Web 應用程式 (`gtsrb.py`)，採用極致的四分頁展示佈局：
+透過 Streamlit 建立了一個互動式的 Web 應用程式 (`gtsrb.py`)，採用極致的四分頁展示佈局：
 - **🚥 GTSRB 交通號誌辨識 (tab1)**: 提供「隨機抽樣」與「本機圖片上傳」功能，可即時觀看多個模型的分類結果。
 - **📊 初始評估指標 (Original) (tab2)**: 讀取 `1st_backup/` 呈現第一階段基準模型 (Baseline) 的 6 大效能圖表。
 - **🔆 優化評估指標 (Optimized) (tab3)**: 讀取 `2nd_backup/` 呈現導入 BatchNorm2d 與 Data Augment 優化後的 6 大效能圖表，AUC 達 1.0000。
