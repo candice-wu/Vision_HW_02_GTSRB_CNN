@@ -5,6 +5,7 @@ import joblib
 import pandas as pd
 import textwrap
 import json
+import numpy as np
 from PIL import Image
 from torchvision import transforms
 from src.model import GTSRB_CNN
@@ -142,12 +143,34 @@ with tab1:
                 probs = torch.softmax(outputs, dim=1)
                 cnn_conf, cnn_pred = torch.max(probs, 1)
             
-            # 4. 增大 class 類別的數值字體
-            st.markdown(f"**CNN (STN):** <span style='font-size: 28px; color: #ff4b4b; font-weight: bold;'>Class {cnn_pred.item()}</span> (Confidence: {cnn_conf.item()*100:.2f}%)", unsafe_allow_html=True)
+            # 4. 增大 class 類別的數值字體 (實作 0.75 門檻安全攔截)
+            if cnn_conf.item() < 0.75:
+                st.markdown(f"**CNN (STN):** <span style='color: #ff9800; font-weight: bold;'>⚠️ 這是非德國交通號誌 (OOD 安全攔截)</span> <span style='font-size: 14px; color: gray;'>(Confidence: {cnn_conf.item()*100:.2f}% < 75%)</span>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"**CNN (STN):** <span style='font-size: 28px; color: #ff4b4b; font-weight: bold;'>Class {cnn_pred.item()}</span> (Confidence: {cnn_conf.item()*100:.2f}%)", unsafe_allow_html=True)
             
             for name, model in ml_models.items():
                 pred = model.predict(img_pca)[0]
-                st.markdown(f"**{name}:** <span style='font-size: 22px; color: #1f77b4; font-weight: bold;'>Class {pred}</span>", unsafe_allow_html=True)
+                if hasattr(model, "predict_proba"):
+                    probs_ml = model.predict_proba(img_pca)[0]
+                    ml_conf = probs_ml.max()
+                elif hasattr(model, "decision_function"):
+                    dec_func = model.decision_function(img_pca)[0]
+                    # Softmax 歸一化轉換為近似機率置信度
+                    e_dec = np.exp(dec_func - np.max(dec_func))
+                    probs_ml = e_dec / e_dec.sum()
+                    ml_conf = probs_ml.max()
+                else:
+                    probs_ml = None
+                    ml_conf = 1.0 # 若不支援機率或距離，預設為 100%
+                
+                if ml_conf < 0.75:
+                    st.markdown(f"**{name}:** <span style='color: #ff9800; font-weight: bold;'>⚠️ 這是非德國交通號誌 (OOD 安全攔截)</span> <span style='font-size: 14px; color: gray;'>(Confidence: {ml_conf*100:.2f}% < 75%)</span>", unsafe_allow_html=True)
+                else:
+                    if probs_ml is not None:
+                        st.markdown(f"**{name}:** <span style='font-size: 22px; color: #1f77b4; font-weight: bold;'>Class {pred}</span> (Confidence: {ml_conf*100:.2f}%)", unsafe_allow_html=True)
+                    else:
+                        st.markdown(f"**{name}:** <span style='font-size: 22px; color: #1f77b4; font-weight: bold;'>Class {pred}</span>", unsafe_allow_html=True)
     else:
         st.info("👈 請點擊隨機抽樣按鈕，或是在上傳區選擇影像進行即時辨識！")
 
