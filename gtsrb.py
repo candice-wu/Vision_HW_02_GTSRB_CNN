@@ -14,8 +14,8 @@ from src.model import GTSRB_CNN
 st.set_page_config(page_title="GTSRB Traffic Sign Recognition", page_icon="🚦", layout="wide")
 
 # System details and unified footer
-SYSTEM_VERSION = "v1.2.0 (Phase 2 | Optimized)"
-UPDATE_DATE = "2026-05-20"
+SYSTEM_VERSION = "v1.3.0 (Phase 3 | OOD Security Defense Edition)"
+UPDATE_DATE = "2026-05-31"
 
 def render_footer():
     st.markdown("---")
