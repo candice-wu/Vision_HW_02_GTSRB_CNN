@@ -283,7 +283,7 @@ with tab3:
                    - **重要性**：交通號誌在實際路況中會因攝影 <span style='color:#4481D7'>角度</span>、<span style='color:#4481D7'>距離</span>等因素，而呈現多變的 <span style='color:#4481D7'>姿態</span> 與 <span style='color:#4481D7'>大小</span>
                 
                 3. <span style='color:#BC72A7'>**ReduceLROnPlateau (自適應學習率)**</span>：
-                   - **策略**：監控 <span style='color:#4481D7'>驗證損失 (Val Loss)</span>，當連續 <span style='color:#DD6D6A'>5</span> 個 Epoch 內損失不再下降時，自動將學習率除以 <span style='color:#DD6D6A'>10</span>
+                   - **策略**：監控 <span style='color:#4481D7'>驗證準確率 (Val Acc)</span>，當連續 <span style='color:#DD6D6A'>3</span> 個 Epoch 內精度陷入停滯時，自動將學習率調降為原本的 10% (factor=0.1)
                    - **效果**：在模型接近收斂時，提供更細微的學習步長，幫助模型跳脫局部最小值，最終觸及 <span style='color:#DD6D6A'>99.90%</span> 的極致精度
                 """), unsafe_allow_html=True)
     st.divider()
